@@ -1,0 +1,269 @@
+/* NAVBAR INFO  */
+.navbar.navbar-8 .navbar-toggler-icon {
+    background-image: url('https://mdbootstrap.com/img/svg/hamburger4.svg?color=000000');
+}
+
+.navbar.navbar-4 .navbar-toggler-icon {
+    background-image: url('https://mdbootstrap.com/img/svg/hamburger7.svg?color=000000');
+}
+
+.custom-toogler .navbar-toggler-icon {
+    background-image: url('https://mdbootstrap.com/img/svg/hamburger7.svg?color=000000');
+}
+/* ======================================== */
+
+/* NAVBAR */
+/* enable absolute positioning */
+.inner-addon {
+    position: relative;
+}
+  
+/* style glyph */
+.inner-addon .custom-fa {
+    position: absolute;
+    padding: 10px;
+    pointer-events: none;
+}
+
+/* align glyph */
+.left-addon .custom-fa  { left:  0px;}
+.right-addon .custom-fa { right: 0px;}
+
+/* add padding  */
+.left-addon input  { padding-left:  30px; }
+.right-addon input { padding-right: 30px; }
+
+/* ========================================= */
+
+.custom-logo-navbar {
+    width: 100px;
+    height: 34px;
+    background-color: #4B1979;
+}
+
+.custom-bg-auth {
+    background-image: url('./images/register.png');
+    padding: 0;
+}
+
+.custom-bg-photo-profile {
+    background-color: #E2D4F0;
+    width: 96px;
+    height: 96px;
+    border-radius: 12px;
+}
+
+.custom-bg-photo-product {
+    width: 96px;
+    height: 96px;
+    border-radius: 12px;
+    color: #D0D0D0;
+    border-style: dashed ;
+}
+
+.custom-bg-notif {
+    background-color: #EEEEEE !important;
+}
+
+.custom-bg-banner-1 {
+    background-color: #B6D4A8;
+}
+
+.custom-bg-banner-2 {
+    background-color: #E2D4F0;
+}
+
+.custom-bg-nav {
+    background-color: #FFE9C9;
+}
+
+.custom-bg-notif-2 {
+    color: #FA2C5A;
+}
+
+.custom-space-top {
+    margin-top: -10px !important;
+}
+
+.custom-space-harga-tawar {
+    width: 20%;
+    height: 43%;
+}
+
+.custom-space-harga-tawar-2 {
+    width: 24%;
+}
+
+.custom-space-nav {
+    width: 8%;
+}
+
+.custom-space {
+    height: 100vh;
+    width: 100%;
+    margin: 0 0 0 0px;
+}
+
+.custom-space-2 {
+    height: 100vh;
+}
+
+.custom-space-3 {
+    width: 444px;
+}
+
+.custom-space-4 {
+    width: 5%;
+}
+
+.custom-space-5 {
+    width: 10%;
+}
+
+.custom-space-6 {
+    width: 264px;
+}
+
+.custom-border-auth {
+    border-radius: 16px !important;
+}
+
+.custom-border-search {
+    border-radius: 12px !important;
+}
+
+.custom-border-banner-left {
+    border-radius: 0px 20px 20px 0px !important;
+}
+
+.custom-border-banner-right {
+    border-radius: 20px 0px 0px 20px !important;
+}
+
+.custom-border-button {
+    border: none;
+    border: 1px solid #7126B5;
+}
+
+.custom-border-button-2 {
+    border: none;
+    border: 1px solid #E2D4F0;
+}
+
+.custom-title-nav{
+    margin-left: -110px !important;
+}
+
+.custom-border-style {
+    border-style: dashed;
+}
+
+.custom-button-auth {
+    background-color: #7126B5;
+}
+
+.custom-button-auth-2 {
+    background-color: #D0D0D0;
+}
+
+.custom-font-auth {
+    color: #7126B5;
+}
+
+.custom-font-1 {
+    font-size: 14px;
+}
+
+.custom-font-2 {
+    font-size: 12px;
+}
+
+.custom-font-3 {
+    font-size: 25px;
+}
+
+.custom-font-4 {
+    font-size: 35px;
+    color: #7126B5;
+}
+
+.custom-font-5 {
+    font-size: 10px;
+}
+
+.custom-font-6 {
+    font-size: 20px;
+}
+
+.custom-font-7 {
+    font-size: 18px;
+}
+
+.custom-display {
+    display: none;
+}
+
+/* ========================== */
+/* RESPONSIVE WEBSITE */
+
+.custom-top-minus
+{
+    margin-top: -50px;
+}
+
+.custom-overflow-x-hidden
+{
+    overflow-x: hidden;
+}
+
+.custom-scroll
+{
+    overflow-x: scroll;
+}
+
+.custom-banner-mobile {
+    /* background-image: url('./images/banner.png'); */
+    height: 150px;
+    width: 100%;
+    background-image: linear-gradient(#FFE9C9, #FFFFFF);
+    /* background-size: contain;
+    background-repeat: no-repeat; */
+}
+
+@media only screen and (max-width: 600px) {
+    .control-dots{
+        margin-bottom: 70px !important;
+    }
+    
+    .custom-display {
+        display: contents;
+    }
+
+    .custom-bg-auth {
+        background-image: none;
+    }
+
+    .custom-space {
+        width: 0;
+        height: 0;
+    }
+
+    .custom-responsive-space {
+        margin-top: 100px;
+    }
+
+    .custom-logo-navbar {
+        width: 100px;
+        height: 34px;
+        background-color: white;
+    }
+
+    .custom-responsive-display {
+        display: none;
+    }
+
+    .custom-responsive-size {
+        font-size: 22px;
+    }
+}
+
