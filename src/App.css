@@ -150,6 +150,17 @@
     border: 1px solid #E2D4F0;
 }
 
+.custom-border-button-3 {
+    border: 1px solid #7126B5 !important;
+    color: #7126B5 !important;
+}
+
+.cursor:hover {
+    cursor: pointer;
+    color: white !important;
+    background-color: #7126B5;
+}
+
 .custom-title-nav{
     margin-left: -110px !important;
 }
