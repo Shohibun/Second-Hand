@@ -9,14 +9,12 @@ import { useEffect } from "react";
 export default function Home() {
   const isMobile = useMediaQuery({ minWidth: 600 });
 
-  const [allData, setAllData] = useState(data.datas); //data awal adalah data didalam json
+  const allData = data.datas
   const [filteredData, setFilteredData] = useState([]); //data awal array kosong
   console.log(allData);
 
-  useEffect(() => {
+  useEffect(() => { //yang dieksekusi pertama kali
     window.scroll(0, 0);
-    setAllData(data.datas);
-    // console.log(setAllData);
   }, []);
 
   function filterProduk(data, nama, hargaMinimum, hargaMaksimum, kategori) {
@@ -116,7 +114,7 @@ export default function Home() {
           <input
             className="form-control mr-sm-2"
             type="number"
-            placeholder="Harga maksimal"
+            placeholder="Harga maksimum"
             aria-label="hargaMaksimal"
             name="rangeMaximum"
           />
