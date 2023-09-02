@@ -81,6 +81,10 @@
     color: #FA2C5A;
 }
 
+.custom-bg-filter {
+    background-color: rgb(249 250 251);
+}
+
 .custom-space-top {
     margin-top: -10px !important;
 }
@@ -155,7 +159,7 @@
     color: #7126B5 !important;
 }
 
-.cursor:hover {
+.custom-cursor:hover {
     cursor: pointer;
     color: white !important;
     background-color: #7126B5;
@@ -208,6 +212,10 @@
 
 .custom-font-7 {
     font-size: 18px;
+}
+
+.custom-font-color {
+    color: rgb(107 114 128) !important;
 }
 
 .custom-display {

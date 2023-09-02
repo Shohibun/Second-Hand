@@ -1,19 +1,23 @@
 import React, { useState } from "react";
 import data from "../databases/data.json";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useMediaQuery } from "react-responsive";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
+import Filter from "../components/Filter";
+import { Modal } from "react-bootstrap";
 
 export default function Home() {
   const isMobile = useMediaQuery({ minWidth: 600 });
 
-  const allData = data.datas
-  const [filteredData, setFilteredData] = useState([]); //data awal array kosong
-  console.log(allData);
+  const [showFilter, setShowFilter] = useState(false);
+  const handleCloseFilter = () => setShowFilter(false);
+  const handleShowFilter = () => setShowFilter(true);
 
-  useEffect(() => { //yang dieksekusi pertama kali
+  const allData = data.datas;
+  const [filteredData, setFilteredData] = useState([]); //data awal array kosong
+
+  useEffect(() => {
+    //yang dieksekusi pertama kali
     window.scroll(0, 0);
   }, []);
 
@@ -32,7 +36,7 @@ export default function Home() {
   }
 
   const handleSubmit = (event) => {
-    event.preventDefault(); //agar tidak reload tampilannya 
+    event.preventDefault(); //agar tidak reload tampilannya
 
     const filterNama = event.target.productName.value;
     const filterHargaMin = event.target.rangeMinimum.value;
@@ -47,7 +51,7 @@ export default function Home() {
       filterKategori
     );
     setFilteredData(filtered);
-    console.log(filtered)
+    console.log(filtered);
   };
 
   return (
@@ -96,6 +100,24 @@ export default function Home() {
           Telurusi Barang Yang Diinginkan
         </h6>
 
+        <div className="d-flex justify-content-center mb-2">
+          <button
+            className="btn custom-cursor custom-border-button-3 w-25"
+            onClick={handleShowFilter}
+          >
+            Filter
+          </button>
+
+          <Modal
+          size="xl"
+          show={showFilter}
+          onHide={handleCloseFilter}
+          centered
+          >
+            <Filter onHide={handleCloseFilter}/>
+          </Modal>
+        </div>
+
         <form method="GET" className="form-inline mb-2" onSubmit={handleSubmit}>
           <input
             className="form-control mr-sm-2"
@@ -126,563 +148,12 @@ export default function Home() {
             name="category"
           />
           <button
-            className="btn cursor custom-border-button-3 custom-border-button-2 my-2 my-sm-0"
+            className="btn cursor custom-border-button-3 my-2 my-sm-0"
             type="submit"
           >
             Search
           </button>
         </form>
-
-        {/* {isMobile ? (
-          <div className="d-flex justify-content-start">
-            <div className="inner-addon left-addon mr-3 custom-space-5 custom-button-auth custom-border-button custom-border-search">
-              <Link to={"#"}>
-                <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  className="text-white custom-fa"
-                />
-                <div className="row align-items-center">
-                  <p className="text-white m-auto pb-1 pt-2 pl-3 custom-font-1">
-                    Semua
-                  </p>
-                </div>
-              </Link>
-            </div>
-
-            <div className="inner-addon left-addon mr-3 custom-space-5 custom-bg-banner-2 custom-border-button-2 custom-border-search">
-              <Link to={"#"}>
-                <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  className="text-dark custom-fa"
-                />
-                <div className="row align-items-center">
-                  <p className="text-dark m-auto pb-1 pt-2 pl-3 custom-font-1">
-                    Hobi
-                  </p>
-                </div>
-              </Link>
-            </div>
-
-            <div className="inner-addon left-addon mr-3 custom-space-5 custom-bg-banner-2 custom-border-button-2 custom-border-search">
-              <Link to={"#"}>
-                <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  className="text-dark custom-fa"
-                />
-                <div className="row align-items-center">
-                  <p className="text-dark m-auto pb-1 pt-2 pl-3 custom-font-1">
-                    Kendaraan
-                  </p>
-                </div>
-              </Link>
-            </div>
-
-            <div className="inner-addon left-addon mr-3 custom-space-5 custom-bg-banner-2 custom-border-button-2 custom-border-search">
-              <Link to={"#"}>
-                <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  className="text-dark custom-fa"
-                />
-                <div className="row align-items-center">
-                  <p className="text-dark m-auto pb-1 pt-2 pl-3 custom-font-1">
-                    Baju
-                  </p>
-                </div>
-              </Link>
-            </div>
-
-            <div className="inner-addon left-addon mr-3 custom-space-5 custom-bg-banner-2 custom-border-button-2 custom-border-search">
-              <Link to={"#"}>
-                <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  className="text-dark custom-fa"
-                />
-                <div className="row align-items-center">
-                  <p className="text-dark m-auto pb-1 pt-2 pl-3 custom-font-1">
-                    Elektronik
-                  </p>
-                </div>
-              </Link>
-            </div>
-
-            <div className="inner-addon left-addon custom-space-5 custom-bg-banner-2 custom-border-button-2 custom-border-search">
-              <Link to={"#"}>
-                <FontAwesomeIcon
-                  icon={faMagnifyingGlass}
-                  className="text-dark custom-fa"
-                />
-                <div className="row align-items-center">
-                  <p className="text-dark m-auto pb-1 pt-2 pl-3 custom-font-1">
-                    Kesehatan
-                  </p>
-                </div>
-              </Link>
-            </div>
-          </div>
-        ) : (
-          <div className="container-fluid custom-scroll">
-            <div className="row flex-row flex-nowrap">
-              <div className="col-5 mr-2 inner-addon border custom-button-auth custom-border-button custom-border-search w-100">
-                <Link to={"#"}>
-                  <FontAwesomeIcon
-                    icon={faMagnifyingGlass}
-                    className="text-white custom-fa"
-                  />
-                  <div className="row align-items-center">
-                    <p className="text-white m-auto pb-1 pt-2 pl-3 custom-font-1">
-                      Semua
-                    </p>
-                  </div>
-                </Link>
-              </div>
-              <div className="col-5 mr-2 inner-addon border custom-bg-banner-2 custom-border-button custom-border-search w-100">
-                <Link to={"#"}>
-                  <FontAwesomeIcon
-                    icon={faMagnifyingGlass}
-                    className="text-dark custom-fa"
-                  />
-                  <div className="row align-items-center">
-                    <p className="text-dark m-auto pb-1 pt-2 pl-3 custom-font-1">
-                      Hobi
-                    </p>
-                  </div>
-                </Link>
-              </div>
-              <div className="col-5 mr-2 inner-addon border custom-bg-banner-2 custom-border-button custom-border-search w-100">
-                <Link to={"#"}>
-                  <FontAwesomeIcon
-                    icon={faMagnifyingGlass}
-                    className="text-dark custom-fa"
-                  />
-                  <div className="row align-items-center">
-                    <p className="text-dark m-auto pb-1 pt-2 pl-3 custom-font-1">
-                      Kendaraan
-                    </p>
-                  </div>
-                </Link>
-              </div>
-              <div className="col-5 mr-2 inner-addon border custom-bg-banner-2 custom-border-button custom-border-search w-100">
-                <Link to={"#"}>
-                  <FontAwesomeIcon
-                    icon={faMagnifyingGlass}
-                    className="text-dark custom-fa"
-                  />
-                  <div className="row align-items-center">
-                    <p className="text-dark m-auto pb-1 pt-2 pl-3 custom-font-1">
-                      Baju
-                    </p>
-                  </div>
-                </Link>
-              </div>
-              <div className="col-5 mr-2 inner-addon border custom-bg-banner-2 custom-border-button custom-border-search w-100">
-                <Link to={"#"}>
-                  <FontAwesomeIcon
-                    icon={faMagnifyingGlass}
-                    className="text-dark custom-fa"
-                  />
-                  <div className="row align-items-center">
-                    <p className="text-dark m-auto pb-1 pt-2 pl-3 custom-font-1">
-                      Elektronik
-                    </p>
-                  </div>
-                </Link>
-              </div>
-              <div className="col-5 mr-2 inner-addon border custom-bg-banner-2 custom-border-button custom-border-search w-100">
-                <Link to={"#"}>
-                  <FontAwesomeIcon
-                    icon={faMagnifyingGlass}
-                    className="text-dark custom-fa"
-                  />
-                  <div className="row align-items-center">
-                    <p className="text-dark m-auto pb-1 pt-2 pl-3 custom-font-1">
-                      Kesehatan
-                    </p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-        )} */}
-
-        {/* <div className="row mb-3">
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_1.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_2.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_1.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_2.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_1.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_2.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_1.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_2.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_1.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_2.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_1.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_2.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_1.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_2.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_1.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_2.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_1.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className={isMobile ? "col-md-2 mt-3" : "col-6 mt-3"}>
-            <div className="border rounded px-1 py-1">
-              <div className="card border-0">
-                <Link to={"/dashboard-product-buyer"}>
-                  <img
-                    src={require("../images/jam_midlle_2.png")}
-                    className="card-img-top"
-                    alt="jam"
-                  />
-                  <div className="card-body">
-                    <p className="card-text text-dark custom-font-1">
-                      Jam tangan Casion
-                    </p>
-                    <p className="text-muted custom-font-5">Aksesoris</p>
-                    <p className="text-dark custom-font-1">Rp 250.000</p>
-                  </div>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div> */}
 
         <div className="row mb-3">
           {allData.length === 0 ? (
