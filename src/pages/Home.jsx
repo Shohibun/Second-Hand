@@ -109,12 +109,17 @@ export default function Home() {
           </button>
 
           <Modal
-          size="xl"
-          show={showFilter}
-          onHide={handleCloseFilter}
-          centered
+            size="xl"
+            show={showFilter}
+            onHide={handleCloseFilter}
+            centered
           >
-            <Filter onHide={handleCloseFilter}/>
+            <Filter
+              onHide={handleCloseFilter}
+              allData={allData}
+              filteredData={filteredData}
+              setFilteredData={setFilteredData}
+            />
           </Modal>
         </div>
 
