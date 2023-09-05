@@ -1,17 +1,13 @@
 import Select from "react-select";
-import React from "react";
+import React, { useEffect } from "react";
 import { faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "react-bootstrap";
 import { useState } from "react";
 
-export default function Filter({
-  onHide,
-  allData,
-  setFilteredData,
-  filteredData,
-}) {
+export default function Filter({ onHide, allData, setFilteredData }) {
   const [isVisibleOne, setIsVisibleOne] = useState(false);
+  const [isVisibleTwo, setIsVisibleTwo] = useState(false);
   const [isVisibleGroup, setIsVisibleGroup] = useState(false);
   const [isVisibleGroupTwo, setIsVisibleGroupTwo] = useState(false);
   const [rangePrice, setRangePrice] = useState(false);
@@ -19,9 +15,12 @@ export default function Filter({
   const [formDataFilter, setFormDataFilter] = useState({
     filterOneBasedOn: "", // Option pertama (nama, deskripsi, dll)
     filerTwoBasedOn: "", // Option pertama tapi di filter kedua (nama, deskripsi, dll)
+    filerThreeBasedOn: "",
     filterOneContains: "", // Option filterOneContains (filterOneAwalan, filterOneAkhiran, dll)
     filterTwoContains: "", // Option filterOneContains di filter kedua (filterOneAwalan, filterOneAkhiran, dll)
-    condition: "", // Kondisi dimana OR atau AND
+    filterThreeContains: "",
+    conditionOne: "", // Kondisi dimana OR atau AND pertama
+    conditionTwo: "", // Kondisi dimana OR atau AND kedua
     filterOneAwalan: "",
     filterOneAkhiran: "",
     filterOneMengandung: "",
@@ -44,6 +43,17 @@ export default function Filter({
     filterTwoRangeMin: "",
     filterTwoRangeMax: "",
     filterTwoCategory: "",
+    filterThreeAwalan: "",
+    filterThreeAkhiran: "",
+    filterThreeMengandung: "",
+    filterThreeTidakMengandung: "",
+    filterThreeMaxTo: "",
+    filterThreeMinTo: "",
+    filterThreeMaxMoreTo: "",
+    filterThreeMinMoreTo: "",
+    filterThreeRangeMin: "",
+    filterThreeRangeMax: "",
+    filterThreeCategory: "",
   });
 
   const filterOneOptionsSatu = [
@@ -58,7 +68,7 @@ export default function Filter({
     { value: "filterOneAwalan", label: "Awalan" },
     { value: "filterOneAkhiran", label: "Akhiran" },
     { value: "filterOneMengandung", label: "Mengandung" },
-    { value: "filterOnetidakMengandung", label: "Tidak Mengandung" },
+    { value: "filterOneTidakMengandung", label: "Tidak Mengandung" },
     { value: "filterOneMaxTo", label: ">" },
     { value: "filterOneMinTo", label: "<" },
     { value: "filterOneMaxMoreTo", label: ">=" },
@@ -84,6 +94,25 @@ export default function Filter({
     { value: "filterTwoMinMoreTo", label: "<=" },
   ];
 
+  const filterThreeOptionsSatu = [
+    { value: "filterThreeName", label: "Nama" },
+    { value: "filterThreeDescription", label: "Deskripsi" },
+    { value: "filterThreePrice", label: "Harga" },
+    { value: "filterThreeRangePrice", label: "Range Harga" },
+    { value: "filterThreeCategory", label: "Kategori" },
+  ];
+
+  const filterThreeOptionsDua = [
+    { value: "filterThreeAwalan", label: "Awalan" },
+    { value: "filterThreeAkhiran", label: "Akhiran" },
+    { value: "filterThreeMengandung", label: "Mengandung" },
+    { value: "filterThreetidakMengandung", label: "Tidak Mengandung" },
+    { value: "filterThreeMaxTo", label: ">" },
+    { value: "filterThreeMinTo", label: "<" },
+    { value: "filterThreeMaxMoreTo", label: ">=" },
+    { value: "filterThreeMinMoreTo", label: "<=" },
+  ];
+
   const optionsEmpat = [
     { value: "or", label: "OR" },
     { value: "and", label: "AND" },
@@ -92,6 +121,7 @@ export default function Filter({
   const optionsLima = [
     { label: "+ Add filter rule" },
     { value: "individu", label: "Add filter rule" },
+    { value: "individuTwo", label: "Add filter rule two" },
     { value: "group", label: "Add filter group" },
     { value: "groupTwo", label: "Add filter group two" },
   ];
@@ -99,7 +129,6 @@ export default function Filter({
   // Bagian Filter
   const handleChange = (event) => {
     const { name, value } = event.target;
-    console.log(event.target, "target");
 
     if (name === "filterOneBasedOn") {
       // Ketika "Based On" berubah, cari option pertama yang sesuai dengan nilai baru
@@ -118,6 +147,23 @@ export default function Filter({
         ...formDataFilter, // Copy semua dataa yang ada di formDataFilter
         [name]: value, // Lalu ubah value nya yang name nya adalah...
         filterOneContains: defaultfilterOneContainsValue, // Atur "filterOneContains" ke nilai yang sesuai
+      });
+    } else if (name === "filterTwoBasedOn") {
+      let defaultfilterTwoContainsValue = "";
+      if (value === "filterTwoName") {
+        defaultfilterTwoContainsValue = filterTwoOptionsDua[0].value;
+      } else if (value === "filterTwoDescription") {
+        defaultfilterTwoContainsValue = filterTwoOptionsDua[2].value;
+      } else if (value === "filterTwoPrice") {
+        defaultfilterTwoContainsValue = filterTwoOptionsDua[4].value;
+      } else if (value === "filterTwoCategory") {
+        defaultfilterTwoContainsValue = filterTwoOptionsSatu[4].value;
+      }
+
+      setFormDataFilter({
+        ...formDataFilter,
+        [name]: value,
+        filterTwoContains: defaultfilterTwoContainsValue,
       });
     } else {
       setFormDataFilter({
@@ -167,7 +213,6 @@ export default function Filter({
       const itemDescription = !description
         .toLowerCase()
         .includes(keyword.toLowerCase());
-        console.log("tidak megandung satu")
       return itemDescription;
     });
     return filteredData;
@@ -222,7 +267,10 @@ export default function Filter({
     return filteredData;
   };
 
+  // or itu digabung
+  // and dicari kesamaan keduanya
   const handleFilter = () => {
+    // Filter pertama
     if (formDataFilter.filterOneContains === "filterOneAwalan") {
       const filteredData = filterDataByNamePrefix(
         allData,
@@ -242,11 +290,11 @@ export default function Filter({
       );
       setResultData(filteredData);
     } else if (
-      formDataFilter.filterOneContains === "filterOnetidakMengandung"
+      formDataFilter.filterOneContains === "filterOneTidakMengandung"
     ) {
       const filteredData = filterDataByDescriptionNotContain(
         allData,
-        formDataFilter.filterOnetidakMengandung
+        formDataFilter.filterOneTidakMengandung
       );
       setResultData(filteredData);
     } else if (formDataFilter.filterOneContains === "filterOneCategory") {
@@ -288,10 +336,8 @@ export default function Filter({
       setResultData(filteredData);
     }
 
-    // or itu digabung
-    // and dicari kesamaan keduanya
-
-    if (formDataFilter.condition === "or") {
+    // Filter kedua
+    if (formDataFilter.conditionOne === "or") {
       if (formDataFilter.filterTwoContains === "filterTwoAwalan") {
         const filteredData = filterDataByNamePrefix(
           allData,
@@ -317,7 +363,6 @@ export default function Filter({
           allData,
           formDataFilter.filterTwoTidakMengandung
         );
-        console.log("tidak mengandung")
         setResultData((resultData) => [...resultData, ...filteredData]);
       } else if (formDataFilter.filterTwoContains === "filterTwoMaxTo") {
         const filteredData = filterDataByPriceMaxTo(
@@ -359,21 +404,90 @@ export default function Filter({
       }
     }
 
-    setFilteredData(resultData);
-    console.log("result data:", resultData);
-    console.log("form data filter:", formDataFilter);
+    // Filter ketiga
+    if (formDataFilter.conditionTwo === "or") {
+      if (formDataFilter.filterThreeContains === "filterThreeAwalan") {
+        const filteredData = filterDataByNamePrefix(
+          allData,
+          formDataFilter.filterThreeAwalan
+        );
+        setResultData((resultData) => [...resultData, ...filteredData]);
+      } else if (formDataFilter.filterThreeContains === "filterThreeAkhiran") {
+        const filteredData = filterDataByNameSuffix(
+          allData,
+          formDataFilter.filterThreeAkhiran
+        );
+        setResultData((resultData) => [...resultData, ...filteredData]);
+      } else if (
+        formDataFilter.filterThreeContains === "filterThreeMengandung"
+      ) {
+        const filteredData = filterDataByDescriptionContain(
+          allData,
+          formDataFilter.filterThreeMengandung
+        );
+        setResultData((resultData) => [...resultData, ...filteredData]);
+      } else if (
+        formDataFilter.filterThreeContains === "filterThreeTidakMengandung"
+      ) {
+        const filteredData = filterDataByDescriptionNotContain(
+          allData,
+          formDataFilter.filterThreeTidakMengandung
+        );
+        setResultData((resultData) => [...resultData, ...filteredData]);
+      } else if (formDataFilter.filterThreeContains === "filterThreeMaxTo") {
+        const filteredData = filterDataByPriceMaxTo(
+          allData,
+          formDataFilter.filterThreeMaxTo
+        );
+        setResultData((resultData) => [...resultData, ...filteredData]);
+      } else if (formDataFilter.filterThreeContains === "filterThreeMinTo") {
+        const filteredData = filterDataByPriceMinTo(
+          allData,
+          formDataFilter.filterThreeMinTo
+        );
+        setResultData((resultData) => [...resultData, ...filteredData]);
+      } else if (
+        formDataFilter.filterThreeContains === "filterThreeMaxMoreTo"
+      ) {
+        const filteredData = filterDataByPriceMaxMoreTo(
+          allData,
+          formDataFilter.filterThreeMaxMoreTo
+        );
+        setResultData((resultData) => [...resultData, ...filteredData]);
+      } else if (
+        formDataFilter.filterThreeContains === "filterThreeMinMoreTo"
+      ) {
+        const filteredData = filterDataByPriceMinMoreTo(
+          allData,
+          formDataFilter.filterThreeMinMoreTo
+        );
+        setResultData((resultData) => [...resultData, ...filteredData]);
+      } else if (formDataFilter.filterThreeContains === "filterThreeCategory") {
+        const filteredData = filterDataByCategory(
+          allData,
+          formDataFilter.filterThreeCategory
+        );
+        setResultData((resultData) => [...resultData, ...filteredData]);
+      } else {
+        const filteredData = filterDataByRangePrice(
+          allData,
+          formDataFilter.filterThreeRangeMin,
+          formDataFilter.filterThreeRangeMax
+        );
+        setResultData((resultData) => [...resultData, ...filteredData]);
+      }
+    }
   };
 
   // Bagian Hide and Show
   const changeHandler = (element) => {
     if (element.value === "individu") {
-      console.log(element.value);
       setIsVisibleOne(true);
+    } else if (element.value === "individuTwo") {
+      setIsVisibleTwo(true);
     } else if (element.value === "group") {
-      console.log(element.value);
       setIsVisibleGroup(true);
     } else if (element.value === "groupTwo") {
-      console.log(element.value);
       setIsVisibleGroupTwo(true);
     } else {
       setIsVisibleOne(false) ||
@@ -387,6 +501,14 @@ export default function Filter({
       setIsVisibleOne(false);
     } else {
       setIsVisibleOne(true);
+    }
+  };
+
+  const deleteHandlerTwo = () => {
+    if (isVisibleTwo === true) {
+      setIsVisibleTwo(false);
+    } else {
+      setIsVisibleTwo(true);
     }
   };
 
@@ -413,6 +535,13 @@ export default function Filter({
       setRangePrice(false);
     }
   };
+
+  // Untuk pertama kali di eksekusi && sebagai mensetting resultData
+  useEffect(() => {
+    setFilteredData(resultData)
+  }, [resultData, setFilteredData])
+  console.log("resultData:", resultData)
+  console.log("formDataFIlter:", formDataFilter)
 
   return (
     <Modal.Body>
@@ -520,11 +649,13 @@ export default function Filter({
           <div className="row mt-3">
             <div className="col-md-2">
               <select
-                name="condition"
+                name="conditionOne"
                 className="form-control"
                 onChange={handleChange}
               >
-                <option value={""} hidden disabled selected>Condition</option>
+                <option value={""} hidden disabled selected>
+                  Condition
+                </option>
                 {optionsEmpat.map((item) => (
                   <option value={item.value}>{item.label}</option>
                 ))}
@@ -538,7 +669,9 @@ export default function Filter({
                 onChange={handleChange}
                 defaultValue={""}
               >
-                <option value={""} hidden disabled>Based On</option>
+                <option value={""} hidden disabled>
+                  Based On
+                </option>
                 {filterTwoOptionsSatu.map((item) => {
                   return <option value={item.value}>{item.label}</option>;
                 })}
@@ -610,6 +743,112 @@ export default function Filter({
                 type="button"
                 className="btn btn-danger"
                 onClick={deleteHandler}
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        ) : null}
+
+        {isVisibleTwo ? (
+          <div className="row mt-3">
+            <div className="col-md-2">
+              <select
+                name="conditionTwo"
+                className="form-control"
+                onChange={handleChange}
+              >
+                <option value={""} hidden disabled selected>
+                  Condition
+                </option>
+                {optionsEmpat.map((item) => (
+                  <option value={item.value}>{item.label}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="col-md-2">
+              <select
+                name="filerThreeBasedOn"
+                className="form-control"
+                onChange={handleChange}
+                defaultValue={""}
+              >
+                <option value={""} hidden disabled>
+                  Based On
+                </option>
+                {filterThreeOptionsSatu.map((item) => {
+                  return <option value={item.value}>{item.label}</option>;
+                })}
+              </select>
+            </div>
+
+            {formDataFilter.filerThreeBasedOn === "filterThreeRangePrice" ? (
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Harga Minimum"
+                  name="filterThreeRangeMin"
+                  onChange={handleChange}
+                />
+              </div>
+            ) : (
+              <div className="col-md-2">
+                <select
+                  name="filterThreeContains"
+                  className="form-control"
+                  onChange={handleChange}
+                  defaultValue={""}
+                >
+                  <option value={""} hidden disabled>
+                    Contains
+                  </option>
+                  {formDataFilter.filerThreeBasedOn === "filterThreeName"
+                    ? filterThreeOptionsDua.slice(0, 2).map((item) => {
+                        return <option value={item.value}>{item.label}</option>;
+                      })
+                    : formDataFilter.filerThreeBasedOn ===
+                      "filterThreeDescription"
+                    ? filterThreeOptionsDua.slice(2, 4).map((item) => {
+                        return <option value={item.value}>{item.label}</option>;
+                      })
+                    : formDataFilter.filerThreeBasedOn === "filterThreePrice"
+                    ? filterThreeOptionsDua.slice(4, 8).map((item) => {
+                        return <option value={item.value}>{item.label}</option>;
+                      })
+                    : null}
+                </select>
+              </div>
+            )}
+
+            {formDataFilter.filerThreeBasedOn === "filterThreeRangePrice" ? (
+              <div className="col-md-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Harga Maksimum"
+                  name="filterThreeRangeMax"
+                  onChange={handleChange}
+                />
+              </div>
+            ) : (
+              <div className="col-md-4">
+                <input
+                  className="form-control"
+                  type="text"
+                  placeholder={formDataFilter.filterThreeContains}
+                  name={formDataFilter.filterThreeContains}
+                  onChange={handleChange}
+                />
+              </div>
+            )}
+
+            <div className="col-md-2">
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={deleteHandlerTwo}
               >
                 Remove
               </button>

@@ -117,7 +117,6 @@ export default function Home() {
             <Filter
               onHide={handleCloseFilter}
               allData={allData}
-              filteredData={filteredData}
               setFilteredData={setFilteredData}
             />
           </Modal>
