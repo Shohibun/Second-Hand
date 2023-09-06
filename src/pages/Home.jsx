@@ -19,7 +19,7 @@ export default function Home() {
   useEffect(() => {
     //yang dieksekusi pertama kali
     window.scroll(0, 0);
-  }, []);
+  }, [filteredData]);
 
   function filterProduk(data, nama, hargaMinimum, hargaMaksimum, kategori) {
     return data.filter((produk) => {
